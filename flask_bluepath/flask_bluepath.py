@@ -24,9 +24,9 @@ class ModuleManager:
     When initialized, it will look for directories in the specified modules directory that match the required structure and load them as modules using Flask blueprints.
     See the README for more details on the required structure of a module directory.
     '''
-    required_subdirectories = [
+
+    _minimum_module_structure = [
         'templates',
-        'static',
         'routing.py',
     ]
 
@@ -81,9 +81,9 @@ class ModuleManager:
         dir_path = os.path.join(self.abs_path_to_modules, dirname)
         if not os.path.isdir(dir_path):
             return False
-        for subdir in self.required_subdirectories:
-            if subdir not in os.listdir(dir_path):
-                print(f"    Directory {dirname} does not match module structure: Missing {subdir}\n")
+        for item in self._minimum_module_structure:
+            if item not in os.listdir(dir_path):
+                print(f"    Directory {dirname} does not match module structure: Missing {item}\n")
                 return False
         print(f"    Directory {dirname} matches module structure\n")
         return True
