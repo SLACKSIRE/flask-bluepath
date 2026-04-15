@@ -32,7 +32,7 @@ app.config[""]
 app.config.get("MODULES_DIRECTORY")
 ```
 
-## Module Structure
+## Typical Module Structure
 📦example_module  
  ┣ 📂static  
  ┃ ┣ 📂css  
@@ -40,6 +40,12 @@ app.config.get("MODULES_DIRECTORY")
  ┃ ┣ 📂images  
  ┃ ┗ 📂js  
  ┃ ┃ ┗ 📜example.js  
+ ┣ 📂templates  
+ ┃ ┗ 📜example.html  
+ ┗ 📜routing.py  
+
+ ## Minimum Module Structure
+ 📦example_module  
  ┣ 📂templates  
  ┃ ┗ 📜example.html  
  ┗ 📜routing.py  
@@ -58,8 +64,19 @@ app.config.get("MODULES_DIRECTORY")
  - **exclude**: A blacklist of modules to exclude. Unlike the "include" parameter, this doesn't affect any modules outside of the ones in this list.  
  -- Default: []  
 
- - **kill_the_beauty**: Disable the printing of ascii art and additional information for this module. This is recommended when running in a production environment.  
- -- Default: False  
+ ### Public Methods
+ - **load_module**: Load a module into the module manager
+ - **exclude**: Append an existing module to the exclusion list
+
+### Private Methods
+- **_print_loading_messages**: print the loading message for Flask-Bluepath.
+- **_print_loading_graphics**: print the Flask-Bluepath ascii artwork.
+- **_print_exclusion_list**: Print the list of excluded modules.
+- **_print_inclusion_list**: Print the list of exclusively included modules.
+- **_load_modules_from_directory**: Discover modules within specified directory and
+attempt to generate a Flask Blueprint from them.
+- **_check_if_directory_matches_module_structure**: Check that a directory contains
+the minimum structural requirements to be considered a module.
 
  ## Calling Static Files from Templatea
  Calling an image from the blueprint (module's) static folder requires using url_for. See below for the syntax, or view the [Official Jinja Documentation](https://jinja.palletsprojects.com/en/stable/).

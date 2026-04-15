@@ -19,7 +19,10 @@ def register_module(module_name: str, modules_dirname: str, app_root_path):
 
 class ModuleManager:
     '''
-    Module Manager is the core class of the bluepath system. Load this to enable the bluepath auto-import system for modules.
+    The core of flask bluepath. This is the class that you call from your app.py file to load your modules.
+    It loads modules from the /Modules directory by default, but you can specify a different directory if you want.
+    When initialized, it will look for directories in the specified modules directory that match the required structure and load them as modules using Flask blueprints.
+    See the README for more details on the required structure of a module directory.
     '''
     required_subdirectories = [
         'templates',
@@ -34,30 +37,30 @@ class ModuleManager:
         self.modules_dirname = rel_path_from_app
         self.exclusive_modules = include
         self.excluded_modules = exclude
-        if not kill_the_beauty: self.print_graphics()
+        if not kill_the_beauty: self._print_graphics()
         if not os.path.exists(self.abs_path_to_modules):
             app.logger.error("Module Directory Not Found.", exc_info=True)
         self._load_modules_from_directory()
 
-    def print_graphics(self):
-        self.print_cool_loading_message()
-        self.print_exclusion_list()
-        self.print_inclusion_list()
+    def _print_graphics(self):
+        self._print_loading_message()
+        self._print_exclusion_list()
+        self._print_inclusion_list()
 
-    def print_cool_loading_message(self):
+    def _print_loading_message(self):
         '''Print an ascii art loading message.'''
         fp = os.path.join(self.app.root_path, "flask_bluepath", "ascii_art.dat")
         with open(fp, "r") as f:
             print(f.read())
             print("\n")
 
-    def print_exclusion_list(self):
+    def _print_exclusion_list(self):
         '''Print modules exclusion list to console'''
         print("=" * 5 + " EXCLUDED ITEMS " + "=" * 5)
         print(str(self.excluded_modules))
         print("\n")
 
-    def print_inclusion_list(self):
+    def _print_inclusion_list(self):
         '''Print modules inclusion list to console'''
         print("=" * 5 + " INCLUDED ITEMS " + "=" * 5)
         print(str(self.exclusive_modules))
@@ -90,3 +93,13 @@ class ModuleManager:
         if not self._check_if_directory_matches_module_structure(abs_path): return
         print(f"Loading {name} module from {abs_path}")
         self.app.register_blueprint(register_module(name, self.modules_dirname, self.app.root_path))
+
+    def exclude(self, module_name: str):
+        '''Exclude a module from being loaded.'''
+        if module_name not in self.excluded_modules:
+            # If the module is in the inclusion list, remove it from there as a safety measure to prevent it from being loaded.
+            if module_name in self.exclusive_modules:
+                self.exclusive_modules.remove(module_name)
+            self.excluded_modules.append(module_name)
+
+
