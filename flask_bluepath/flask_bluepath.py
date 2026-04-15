@@ -102,4 +102,10 @@ class ModuleManager:
                 self.exclusive_modules.remove(module_name)
             self.excluded_modules.append(module_name)
 
-
+    def include(self, module_name: str):
+        '''Include a module to be loaded. If the inclusion list is not empty, only the modules in the inclusion list will be loaded.'''
+        if module_name not in self.exclusive_modules:
+            # If the module is in the exclusion list, remove it from there as a safety measure to prevent it from being excluded.
+            if module_name in self.excluded_modules:
+                self.excluded_modules.remove(module_name)
+            self.exclusive_modules.append(module_name)
