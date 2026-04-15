@@ -52,16 +52,17 @@ class ModuleManager:
             print("\n")
 
     def print_exclusion_list(self):
-        '''Print modules inclusion list to console'''
+        '''Print modules exclusion list to console'''
         print("=" * 5 + " EXCLUDED ITEMS " + "=" * 5)
         print(str(self.excluded_modules))
         print("\n")
 
     def print_inclusion_list(self):
-        '''Print modules exclusion list to console'''
+        '''Print modules inclusion list to console'''
         print("=" * 5 + " INCLUDED ITEMS " + "=" * 5)
-        print(str(self.excluded_modules))
+        print(str(self.exclusive_modules))
         print("\n")
+        print("Note: If the inclusion list is not empty, only the modules in the inclusion list will be loaded.\n")
 
     def _load_modules_from_directory(self):
         '''List all directories in the modules directory and load them as modules if they match the required structure'''
