@@ -37,7 +37,7 @@ class ModuleManager:
         if not kill_the_beauty: self.print_graphics()
         if not os.path.exists(self.abs_path_to_modules):
             app.logger.error("Module Directory Not Found.", exc_info=True)
-        self.__load_modules_from_directory()
+        self._load_modules_from_directory()
 
     def print_graphics(self):
         self.print_cool_loading_message()
@@ -63,15 +63,15 @@ class ModuleManager:
         print(str(self.excluded_modules))
         print("\n")
 
-    def __load_modules_from_directory(self):
+    def _load_modules_from_directory(self):
         '''List all directories in the modules directory and load them as modules if they match the required structure'''
         discovered_dirs = os.listdir(self.abs_path_to_modules)
         for dir in discovered_dirs:
             path = os.path.join(self.abs_path_to_modules, dir)
-            if self.__check_if_directory_matches_module_structure(dir):
+            if self._check_if_directory_matches_module_structure(dir):
                 self.load_module(dir, path)
 
-    def __check_if_directory_matches_module_structure(self, dirname: str):
+    def _check_if_directory_matches_module_structure(self, dirname: str):
         '''Check if a directory contains the required subdirectories'''
         print(f"Checking if directory {dirname} matches module structure")
         dir_path = os.path.join(self.abs_path_to_modules, dirname)
@@ -86,6 +86,6 @@ class ModuleManager:
 
     def load_module(self, name: str, abs_path: str):
         '''Load a module into the app'''
-        if not self.__check_if_directory_matches_module_structure(abs_path): return
+        if not self._check_if_directory_matches_module_structure(abs_path): return
         print(f"Loading {name} module from {abs_path}")
         self.app.register_blueprint(register_module(name, self.modules_dirname, self.app.root_path))
